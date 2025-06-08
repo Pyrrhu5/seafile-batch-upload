@@ -1,0 +1,5 @@
+.venv
+.vscode
+.env
+uploaded_files.log
+error.log
