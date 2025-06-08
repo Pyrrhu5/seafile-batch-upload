@@ -8,12 +8,11 @@ from .constants import SEAFILE_SERVER
 
 
 class TokenMeta(ABCMeta):
-    
+
     _lock: Lock
     _token: Optional[str] = None
     _api_key: Optional[str] = None
     _api_secret: Optional[str] = None
-
 
     def __init__(cls, name, bases, clsdict):
         super().__init__(name, bases, clsdict)
@@ -25,11 +24,11 @@ class Token(metaclass=TokenMeta):
     @classmethod
     def set_api_key(cls, api_key):
         cls._api_key = api_key
-    
+
     @classmethod
     def set_api_secret(cls, api_secret):
         cls._api_secret = api_secret
-    
+
     @classmethod
     def get_token(cls):
         if not cls._token:
@@ -44,7 +43,8 @@ class Token(metaclass=TokenMeta):
                 for attr_name, method in {"_api_key": "set_api_key", "_api_secret": "set_api_secret"}.items()
                 if getattr(cls, attr_name, None) is None
             }
-            raise AttributeError(f"Can't set the token without {', '.join(missing.keys())} set. Call {', '.join(missing.values())}")
+            raise AttributeError(
+                f"Can't set the token without {', '.join(missing.keys())} set. Call {', '.join(missing.values())}")
 
         with cls._lock:
             cls._token = cls.renew_token()
